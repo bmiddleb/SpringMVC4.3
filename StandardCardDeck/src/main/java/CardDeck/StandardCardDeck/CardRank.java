@@ -1,5 +1,7 @@
 package CardDeck.StandardCardDeck;
 
+import java.util.Comparator;
+
 public enum CardRank {
 	TWO (2),
 	THREE (3),
@@ -23,8 +25,16 @@ public enum CardRank {
 	}
 	
 	public boolean isRankedHigher (CardRank rank) {
-		if (this.order  > rank.order) return true;
+		if (this.order  < rank.order) return true;
 		return false;
+	}
+	
+	public static Comparator<Card> byCardRank = (card1, card2) -> CardRank.compare (
+            card1.getCardRank(), card2.getCardRank());
+	
+	public static int compare (CardRank rank1, CardRank rank2) {
+		if (rank1.order < rank2.order) return 1;
+		return -1;
 	}
 
 }

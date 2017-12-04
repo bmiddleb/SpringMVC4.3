@@ -1,23 +1,33 @@
 package CardDeck.StandardCardDeck;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Random;
+import java.util.List;
+
 
 public class StandardCardDeck implements CardDeck {
 	
+	private static final int TOP_CARD = 0;
+
 	public static int MAX_CARDS_IN_DECK = 52;
 
-	private Map<Integer, Card> deck = new HashMap<Integer, Card>();
-	public Map<Integer, Card> getDeck() { return deck; }
+	//private Map<Integer, Card> deck = new HashMap<Integer, Card>();
+	private List<Card> deck = new LinkedList<Card>();
+	
+	
+	public List<Card> getDeck() { return deck; }
+	public void setDeck(List<Card> newDeck) { this.deck = newDeck; }
+
+	public Collection<Card> getCards() { return (Collection<Card>) deck; }
 
 
 	public StandardCardDeck() {
 		initialize();
 	}
 	
+
 	private void initialize() {
 		loadDeck();
 		shuffle();
@@ -25,66 +35,39 @@ public class StandardCardDeck implements CardDeck {
 
 
 	public void shuffle() {
-		LinkedList<Integer> positions = new LinkedList<Integer>();
-		for (int i = 0; i < getDeck().size(); i++) positions.add(new Integer(i+1));
-
-		Iterator<Integer> deckItr = getDeck().keySet().iterator();
-
-		int existingPosition = 0;
-		int newPositionIndex = 0;
-
-		Random random = new Random();
-		Map<Integer, Card> newDeck = new HashMap<Integer, Card>();
-
-		while (deckItr.hasNext()) {
-			System.out.println(positions.size()+" positions left");
-			existingPosition = deckItr.next();
-			newPositionIndex = random.nextInt(positions.size());
-			System.out.println("position list size = " + positions.size());
-			System.out.println("new position index " + newPositionIndex);
-			System.out.println("putting position "+existingPosition+" into position " + positions.get(newPositionIndex));
-			newDeck.put( positions.get(newPositionIndex), getDeck().get(existingPosition) );
-			deckItr.remove();
-			positions.remove(newPositionIndex);
-		}
-		
-		deck = newDeck;
+		Collections.shuffle(this.deck);
 		
 		System.out.println(this.getDeck().size()+" cards in shuffled deck");
 	}
 
+
 	public Card deal() throws DeckIsEmptyException {
-		Iterator<Card> itr = getDeck().values().iterator();
-		Card dealtCard = null;
 		
-		if ( itr.hasNext() ) {
-			dealtCard = (Card) itr.next();
-			itr.remove();
-			return dealtCard;
-		}
-		else throw new DeckIsEmptyException();
+		if ( this.deck.isEmpty() ) throw new DeckIsEmptyException();
 		
+		Card dealtCard = deck.get(TOP_CARD);
+		deck.remove(TOP_CARD);
+		
+		return dealtCard;
 	}
+
 
 	public int remaining() {
 		return getDeck().size();
 	}
 
+	
 	public void loadDeck() {
 
 		int cardCount = 0;
 		Card newCard = null;
-		CardRank newRank = null;
-		CardSuit newSuit = null;
+		this.setDeck( new LinkedList<Card>() ); // discard old deck, create new
 
 		for (CardSuit suit : CardSuit.values()) {
-			newSuit = suit;	
-
 			for (CardRank rank : CardRank.values()) {
-				newRank = rank;
 				newCard = new StandardCard(suit, rank);
+				getDeck().add(newCard);
 				cardCount++;
-				getDeck().put(cardCount, newCard);
 			}
 		}
 
@@ -93,7 +76,7 @@ public class StandardCardDeck implements CardDeck {
 	
 	
 	public String toString() {
-		Iterator<Card> deckItr = getDeck().values().iterator();
+		Iterator<Card> deckItr = getDeck().iterator();
 		StringBuilder strBuilder = new StringBuilder();
 		System.out.println(getDeck().size() + " cards in deck");
 

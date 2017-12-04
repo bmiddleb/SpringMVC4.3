@@ -1,93 +1,57 @@
 package CardDeck.StandardCardDeck;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class StandardCardHand implements CardHand {
 
 	int maxCardsInHand = 0;
-	private LinkedList<Card> cardHand = new LinkedList<Card>();
+	private Collection<Card> cardHand = new LinkedList<Card>();
 
-	public LinkedList<Card> getCardHand() { return cardHand; }
-	public void setCardHand(LinkedList<Card> cardHand) {
-		this.cardHand = cardHand;
+
+	public Collection<Card> getCardHand() { return cardHand; }
+	public void setCardHand(List<Card> newCardHand) {
+		this.cardHand = newCardHand;
 	}
+	
 
 	public int getMaxCardsInHand() { return maxCardsInHand; }
 	public void setMaxCardsInHand(int maxCardsInHand) {
 		this.maxCardsInHand = maxCardsInHand;
 	}
+	
 
 	public void addCard(Card card) { cardHand.add(card); }
+	
 
-	public void removeCard(Card card) {
-		cardHand.remove(card);
-	}
+	public void removeCard(Card card) { cardHand.remove(card); }
+	
 
-	public void sortHandBySuit() {
+	public void sortHandBySuit() { // Ascending order
 		System.out.println("\nSorting by suit... ");
-		Card[] cards = cardHand.toArray(new Card[cardHand.size()]);
-		Card tempCard = null;
-		boolean notDoneSorting = true;
-		int whereToEnd = -1;
-		int first = cardHand.size() - 1;
-		int iterNum = 1;
 
-		while (notDoneSorting) {
-			notDoneSorting = false;
-			System.out.println("\nIteration "+ iterNum);
-			iterNum++;
-			whereToEnd++;
+		List<Card> cardHand = 
+    			this.getCardHand()
+    			.stream()
+    			.sorted(CardSuit.byCardSuit)
+			.collect(Collectors.toList());
 
-			for (int i=first; i > whereToEnd; i--) {
-				if (cards[i].getCardSuit().isRankedHigher(cards[i-1].getCardSuit())) {
-					System.out.println("\n"+cards[i] +" is ranked higher than "+cards[i-1]);
-					tempCard = cards[i-1];
-					cards[i-1] = cards[i];
-					cards[i] = tempCard;
-					notDoneSorting = true;
-				} else {
-					System.out.println("\n"+cards[i] +" is NOT ranked higher than "+cards[i-1]);
-				}
-			}
-			if (notDoneSorting) for (int j=0; j< cards.length; j++) System.out.println(cards[j]); 
-		}
-		
-		cardHand = new LinkedList<Card>(Arrays.asList(cards));
+		this.setCardHand(cardHand);
 	}
 
-	public void sortHandByValue() { // Descending order
+	public void sortHandByValue() { // Ascending order
 		System.out.println("\nSorting by rank... ");
-		Card[] cards = cardHand.toArray(new Card[cardHand.size()]);
-		Card tempCard = null;
-		boolean notDoneSorting = true;
-		int whereToEnd = -1;
-		int first = cards.length - 1;
-		int iterNum = 1;
 
-		while (notDoneSorting) {
-			notDoneSorting = false;
-			System.out.println("\nIteration "+ iterNum);
-			iterNum++;
-			whereToEnd++;
+		List<Card> cardHand = 
+    			this.getCardHand()
+    			.stream()
+    			.sorted(CardRank.byCardRank)
+			.collect(Collectors.toList());
 
-			for (int i=first; i>whereToEnd; i--) {
-				if (cards[i].getCardRank().isRankedHigher(cards[i-1].getCardRank())) {
-					System.out.println("\n"+cards[i] +" is ranked higher than "+cards[i-1]);
-					tempCard = cards[i-1];
-					cards[i-1] = cards[i];
-					cards[i] = tempCard;
-					notDoneSorting = true;
-				} else {
-					System.out.println("\n"+cards[i] +" is NOT ranked higher than "+cards[i-1]);
-				}
-			}
-			if (notDoneSorting) for (int j=0; j< cards.length; j++) System.out.println(cards[j]); 
-		}
-		
-		cardHand = new LinkedList<Card>(Arrays.asList(cards));
+		this.setCardHand(cardHand);
 	}
 	
 	public String toString() {
