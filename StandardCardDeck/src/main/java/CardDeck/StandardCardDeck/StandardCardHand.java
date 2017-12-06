@@ -25,8 +25,6 @@ public class StandardCardHand implements CardHand {
 	
 
 	public void addCard(Card card) { cardHand.add(card); }
-	
-
 	public void removeCard(Card card) { cardHand.remove(card); }
 	
 
@@ -37,6 +35,11 @@ public class StandardCardHand implements CardHand {
     			this.getCardHand()
     			.stream()
     			.sorted(CardSuit.byCardSuit)
+    			// Alternatives:
+    			//.sorted((e1, e2) -> 
+    			//	new Integer(e1.getCardSuit().getOrder()).compareTo(
+    			//		new Integer(e2.getCardSuit().getOrder())))
+    			//.sorted( Comparator.comparing(Card::getCardSuit) ) // natural order
 			.collect(Collectors.toList());
 
 		this.setCardHand(cardHand);

@@ -29,8 +29,8 @@ public enum CardRank {
 		return false;
 	}
 	
-	public static Comparator<Card> byCardRank = (card1, card2) -> CardRank.compare (
-            card1.getCardRank(), card2.getCardRank());
+	public static Comparator<Card> byCardRank = (card1, card2) -> 
+		CardRank.compare ( card1.getCardRank(), card2.getCardRank() );
 	
 	public static int compare (CardRank rank1, CardRank rank2) {
 		if (rank1.order < rank2.order) return 1;

@@ -26,8 +26,8 @@ public enum CardSuit {
 	
 	public String toString() { return this.name(); }
 	
-	public static Comparator<Card> byCardSuit = (card1, card2) -> CardSuit.compare (
-            card1.getCardSuit(), card2.getCardSuit());
+	public static Comparator<Card> byCardSuit = (card1, card2) -> 
+			CardSuit.compare ( card1.getCardSuit(), card2.getCardSuit() );
 
 	public static int compare (CardSuit cardSuit, CardSuit cardSuit2) {
 		if (cardSuit.order < cardSuit2.order) return 1;
