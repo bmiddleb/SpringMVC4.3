@@ -47,22 +47,17 @@ public class GreetControllerUnitTest extends AbstractJUnit4SpringContextTests {
 		System.out.println("...completed");
 	}
 
-	/*
-	@Before
-	public void setup() {
-		this.mockMvc = MockMvcBuilders
-				.standaloneSetup(new GreetController())
-				.build();
-	}
-	*/
 
 	@Test
 	public void givenWac_whenServletContext_thenItProvidesGreetController() {
+		System.out.println("Verifying set up...");
 	    ServletContext servletContext = wac.getServletContext();
 	     
 	    Assert.assertNotNull(servletContext);
 	    Assert.assertTrue(servletContext instanceof MockServletContext);
 	    Assert.assertNotNull(wac.getBean("greetController"));
+
+		System.out.println("...completed");
 	}
 
 	@Test
