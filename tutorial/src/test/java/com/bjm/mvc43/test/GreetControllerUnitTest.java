@@ -25,12 +25,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.bjm.mvc43.GreetController;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({})
 @WebAppConfiguration
 @ContextConfiguration(locations = 
-	{"classpath:test-app-context.xml",
+	{"classpath:greeting-servlet.xml",
 	"classpath:test-bean-context.xml"})
 public class GreetControllerUnitTest extends AbstractJUnit4SpringContextTests {
 	private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
@@ -43,7 +45,11 @@ public class GreetControllerUnitTest extends AbstractJUnit4SpringContextTests {
 	@Before
 	public void setup() {
 		System.out.println("Initiating set up...");
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+		//this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+			// Loads Spring config
+        this.mockMvc = MockMvcBuilders.standaloneSetup(new GreetController()).build();
+			// Does NOT load Spring config
+
 		System.out.println("...completed");
 	}
 
@@ -64,89 +70,64 @@ public class GreetControllerUnitTest extends AbstractJUnit4SpringContextTests {
 	public void givenHomePageURI_whenMockMVC_thenReturnsIndexJSPViewName() throws Exception {
 		this.mockMvc
 			.perform(get("/homePage"))
-			.andExpect(view()
-			.name("index"));
+			.andExpect(view().name("index"));
 	}
 
 	@Test
 	public void givenGreetURI_whenMockMVC_thenVerifyResponse() throws Exception {
 		this.mockMvc
 			.perform(get("/greet"))
-			.andExpect(status()
-			.isOk())
-			.andExpect(content()
-			.contentType(CONTENT_TYPE))
-			.andExpect(jsonPath("$.message")
-			.value("Hello World!!!"));
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(CONTENT_TYPE))
+			.andExpect(jsonPath("$.message").value("Hello World!!!"));
 	}
 
 	@Test
 	public void givenGreetURIWithPathVariable_whenMockMVC_thenVerifyResponse() throws Exception {
 		this.mockMvc
 			.perform(get("/greetWithPathVariable/John"))
-			.andExpect(status()
-			.isOk())
-			.andExpect(content()
-			.contentType(CONTENT_TYPE))
-			.andExpect(jsonPath("$.message")
-			.value("Hello World John!!!"));
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(CONTENT_TYPE))
+			.andExpect(jsonPath("$.message").value("Hello World John!!!"));
 	}
 
 	@Test
 	public void givenGreetURIWithPathVariable_2_whenMockMVC_thenVerifyResponse() throws Exception {
 		this.mockMvc
 			.perform(get("/greetWithPathVariable/{name}", "Doe"))
-			.andExpect(status()
-			.isOk())
-			.andExpect(content()
-			.contentType(CONTENT_TYPE))
-			.andExpect(jsonPath("$.message")
-			.value("Hello World Doe!!!"));
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(CONTENT_TYPE))
+			.andExpect(jsonPath("$.message").value("Hello World Doe!!!"));
 	}
 
 	@Test
 	public void givenGreetURIWithQueryParameter_whenMockMVC_thenVerifyResponse() throws Exception {
 		this.mockMvc
-			.perform(get("/greetWithQueryVariable")
-			.param("name", "John Doe"))
-			.andDo(print())
-			.andExpect(status()
-			.isOk())
-			.andExpect(content()
-			.contentType(CONTENT_TYPE))
-			.andExpect(jsonPath("$.message")
-			.value("Hello World John Doe!!!"));
+			.perform(get("/greetWithQueryVariable").param("name", "John Doe")).andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(CONTENT_TYPE))
+			.andExpect(jsonPath("$.message").value("Hello World John Doe!!!"));
 	}
 
 	@Test
 	public void givenGreetURIWithPost_whenMockMVC_thenVerifyResponse() throws Exception {
 		this.mockMvc
-			.perform(MockMvcRequestBuilders
-			.post("/greetWithPost"))
-			.andDo(print())
-			.andExpect(status()
-			.isOk())
-			.andExpect(content()
-			.contentType(CONTENT_TYPE))
-			.andExpect(jsonPath("$.message")
-			.value("Hello World!!!"));
+			.perform(MockMvcRequestBuilders.post("/greetWithPost")).andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(CONTENT_TYPE))
+			.andExpect(jsonPath("$.message").value("Hello World!!!"));
 	}
 
 	@Test
 	public void givenGreetURIWithPostAndFormData_whenMockMVC_thenVerifyResponse() throws Exception {
 		this.mockMvc
-			.perform(MockMvcRequestBuilders
-			.post("/greetWithPostAndFormData")
-			.param("id", "1")
-			.param("name", "John Doe"))
-			.andDo(print())
-			.andExpect(status()
-			.isOk())
-			.andExpect(content()
-			.contentType(CONTENT_TYPE))
-			.andExpect(jsonPath("$.message")
-			.value("Hello World John Doe!!!"))
-			.andExpect(jsonPath("$.id")
-			.value(1));
+			.perform(MockMvcRequestBuilders.post("/greetWithPostAndFormData")
+				.param("id", "1")
+				.param("name", "John Doe"))
+				.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(CONTENT_TYPE))
+			.andExpect(jsonPath("$.message").value("Hello World John Doe!!!"))
+			.andExpect(jsonPath("$.id").value(1));
 	}
 }
