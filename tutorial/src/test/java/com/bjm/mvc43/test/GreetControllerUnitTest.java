@@ -45,14 +45,13 @@ public class GreetControllerUnitTest extends AbstractJUnit4SpringContextTests {
 	@Before
 	public void setup() {
 		System.out.println("Initiating set up...");
-		//this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 			// Loads Spring config
-        this.mockMvc = MockMvcBuilders.standaloneSetup(new GreetController()).build();
+        //this.mockMvc = MockMvcBuilders.standaloneSetup(new GreetController()).build();
 			// Does NOT load Spring config
 
 		System.out.println("...completed");
 	}
-
 
 	@Test
 	public void givenWac_whenServletContext_thenItProvidesGreetController() {
