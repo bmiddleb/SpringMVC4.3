@@ -18,7 +18,14 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>greeting</servlet-name>
-        <url-pattern>/</url-pattern>
-        <url-pattern>/index.jsp</url-pattern>
+        <url-pattern>/greeting*</url-pattern>
+    </servlet-mapping>
+	<servlet>
+		<servlet-name>indexJSP</servlet-name>
+		<jsp-file>/jsp/index.jsp</jsp-file>
+	</servlet>
+    <servlet-mapping>
+        <servlet-name>indexJSP</servlet-name>
+        <url-pattern>/jsp/index.jsp</url-pattern>
     </servlet-mapping>
 </web-app>
